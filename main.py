@@ -1,4 +1,3 @@
-from xml.dom.pulldom import PullDOM
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
 from models import create_tables, Shop, Publisher, Book, Stock, Sale 
@@ -25,7 +24,9 @@ while True:
     publisher = input('Введите номер издателя (для выхода введите 0): ')
     if publisher == '0':
         break
-    for c in session.query(Stock).join(Book.stocks).filter(Book.id_publisher==publisher).all():
+
+    subquery = session.query(Stock).join(Book.stocks).filter(Book.id_publisher==publisher).subquery()
+    for c in session.query(Shop).join(subquery, Shop.id == subquery.c.id_shop).all():
         print(c)
 
 session.close()

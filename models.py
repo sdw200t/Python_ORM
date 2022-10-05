@@ -13,6 +13,10 @@ class Shop(Base):
 
     stocks = relationship('Stock', back_populates='shop')
 
+    def __str__(self):
+        return f'Магазин {self.name}'
+
+
 class Publisher(Base):
     __tablename__ = 'publisher'
 
@@ -24,6 +28,7 @@ class Publisher(Base):
     def __str__(self):
         return f'{self.id}: {self.name}'
 
+
 class Book(Base):
     __tablename__ = 'book'
 
@@ -33,6 +38,7 @@ class Book(Base):
 
     publisher = relationship(Publisher, back_populates='books')
     stocks = relationship('Stock', back_populates='book')
+
 
 class Stock(Base):
     __tablename__ = 'stock'
@@ -47,7 +53,8 @@ class Stock(Base):
     sales = relationship('Sale', back_populates='stock')
 
     def __str__(self):
-        return f'Магазин {self.id}'
+        return f'Склад {self.id}'
+
 
 class Sale(Base):
     __tablename__ = 'sale'
@@ -59,6 +66,7 @@ class Sale(Base):
     id_stock = sq.Column(sq.Integer, sq.ForeignKey('stock.id'), nullable=False)
 
     stock = relationship(Stock, back_populates='sales')
+
 
 def create_tables(engine):
     Base.metadata.drop_all(engine)
